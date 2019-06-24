@@ -1,3 +1,9 @@
-from django.shortcuts import render
+from rest_framework import viewsets
 
-# Create your views here.
+from app.models import Provider
+from app.serializers import ProviderSerializer
+
+
+class ProviderViewSet(viewsets.ModelViewSet):
+    queryset = Provider.objects.all()
+    serializer_class = ProviderSerializer
