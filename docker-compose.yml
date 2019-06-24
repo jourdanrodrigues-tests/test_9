@@ -1,0 +1,26 @@
+version: "3"
+
+services:
+
+  db:
+    container_name: mozio_test_db
+    image: postgres:10.3
+    environment:
+      - POSTGRES_PASSWORD=mozio_test_pass
+      - POSTGRES_USER=mozio_test_user
+      - POSTGRES_DB=mozio_test_db
+
+  server:
+    container_name: mozio_test_server
+    build: .
+    command: gunicorn -b 0.0.0.0:8000 core.wsgi --log-file -
+    environment:
+      - DATABASE_URL=postgres://mozio_test_user:mozio_test_pass@db/mozio_test_db
+      - PRODUCTION=1
+      # Set the following in your environment or in the ".env" file
+      - ALLOWED_HOSTS
+      - SECRET_KEY
+    ports:
+      - "8000:8000"
+    links:
+      - db
