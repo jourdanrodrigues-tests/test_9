@@ -34,5 +34,5 @@ class LatLongFilter(BaseFilterBackend):
 
         # Creating another queryset so it's possible to use it as a queryset throughout the request (other filters)
         point = Point(float(longitude), float(latitude))
-        polygons_ids = [polygon.id for polygon in queryset.only('id', 'points') if polygon.contains(point)]
+        polygons_ids = [polygon.id for polygon in queryset.only('id', 'points').iterator() if polygon.contains(point)]
         return queryset.filter(id__in=polygons_ids)
