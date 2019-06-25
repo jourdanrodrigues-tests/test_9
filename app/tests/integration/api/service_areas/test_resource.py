@@ -29,6 +29,32 @@ class TestGet(APITestCase):
 
         self.assertEqual(len(response.data), 13)
 
+    def test_when_latitude_and_longitude_are_sent_in_query_params_then_returns_filtered_service_areas(self):
+        query_params = {
+            'latitude': 33.52,
+            'longitude': -111.92,
+        }
+
+        containing_polygon = [
+            (-111.92, 33.53),
+            (-111.96, 33.51),
+            (-111.90, 33.50),
+        ]
+
+        not_containing_polygon = [
+            (-111.92, 33.57),
+            (-111.96, 33.55),
+            (-111.90, 33.54),
+        ]
+
+        quantity_matching = 5
+        ServiceAreaFactory.create_batch(quantity_matching, points=containing_polygon)
+        ServiceAreaFactory.create_batch(quantity_matching + 10, points=not_containing_polygon)
+
+        response = self.client.get('/api/service_areas/', query_params)
+
+        self.assertEqual(len(response.data), quantity_matching)
+
 
 class TestGetOne(APITestCase):
     def test_when_service_area_does_not_exist_then_returns_404_status_code(self):
