@@ -12,6 +12,10 @@ Before doing anything, run the following:
 ./scripts/setup_dev_env.sh
 ```
 
+## API Docs
+
+With the server up, it will be available through `/docs/`.
+
 ## Database
 
 This project is setup on top of PostgreSQL, and the connection is established through an environment variable

@@ -1,3 +1,4 @@
+import coreapi
 from rest_framework.filters import BaseFilterBackend
 
 from app.abstractions import Point
@@ -14,6 +15,17 @@ def get_longitude(query_params: dict) -> str or None:
 
 
 class LatLongFilter(BaseFilterBackend):
+    def get_schema_fields(self, view):
+        # noinspection PyArgumentList
+        return [
+            coreapi.Field(name="y", description="Latitude", required=False, location='query'),
+            coreapi.Field(name="x", description="Longitude", required=False, location='query'),
+            coreapi.Field(name="lat", description="Latitude", required=False, location='query'),
+            coreapi.Field(name="long", description="Longitude", required=False, location='query'),
+            coreapi.Field(name="latitude", description="Latitude", required=False, location='query'),
+            coreapi.Field(name="longitude", description="Longitude", required=False, location='query'),
+        ]
+
     def filter_queryset(self, request, queryset, view):
         latitude = get_latitude(request.query_params)
         longitude = get_longitude(request.query_params)
